@@ -17,6 +17,8 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import models.Arquivo;
+
 
 public class Servidor implements Runnable{
 public Socket socketCliente;

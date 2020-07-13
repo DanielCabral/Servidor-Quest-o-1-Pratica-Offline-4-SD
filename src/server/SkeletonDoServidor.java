@@ -1,3 +1,4 @@
+package server;
 
 
 
@@ -15,6 +16,43 @@ public class SkeletonDoServidor {
 	private static String nomeServidor = "127.0.0.1";
 	private static int porta = 12344;
 	private static final String NOMEOBJDIST = "ServidorDeArquivos";
+	
+	InterfaceDoServidor stub;
+	
+	public SkeletonDoServidor() {
+		try {
+			// Criando
+			Servidor c = new Servidor();
+			
+			System.setProperty("java.security.policy", "java.policy");
+			if (System.getSecurityManager() == null) {
+			 System.setSecurityManager(new SecurityManager());
+			 }
+			
+			System.setProperty("java.security.policy","file:java.policy");
+             
+			// Definindo o hostname do servidor
+			System.setProperty("java.rmi.server.hostname", nomeServidor);
+			
+			stub = (InterfaceDoServidor)
+			UnicastRemoteObject.exportObject(c, 0);
+			
+			// Criando serviÃ§o de registro
+			Registry registro = LocateRegistry.createRegistry(porta);
+			
+			// Registrando objeto distribuido
+			registro.bind(NOMEOBJDIST, stub);
+			System.out.println("Servidor de arquivos pronto!\n");
+			System.out.println("Endereço: "+nomeServidor+"\nPorta: "+porta+"\n");
+			System.out.println("Pressione CTRL + C para encerrar...");
+		} catch (RemoteException | AlreadyBoundException ex) {
+		Logger.getLogger(SkeletonDoServidor.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+	
+	public void adicionarArquivo(String nome, String caminho) throws RemoteException {
+		stub.adicionarArquivo(nome, caminho);
+	}
 	
 	public static void main(String args[]){
 		try {
@@ -40,9 +78,6 @@ public class SkeletonDoServidor {
 			// Registrando objeto distribuÂ´Ä±do
 			registro.bind(NOMEOBJDIST, stub);
 			
-			System.out.println("Servidor de arquivos pronto!\n");
-			System.out.println("Endereço: "+nomeServidor+"\nPorta: "+porta+"\n");
-			System.out.println("Pressione CTRL + C para encerrar...");
 		} catch (RemoteException | AlreadyBoundException ex) {
 		Logger.getLogger(SkeletonDoServidor.class.getName()).log(Level.SEVERE, null, ex);
 		}

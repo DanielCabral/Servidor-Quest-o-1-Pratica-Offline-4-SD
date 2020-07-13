@@ -8,7 +8,7 @@ public class Arquivo implements Serializable {
     
 	   private String nome;
 	   private String conteudo;
-	   private transient long tamanhoKB;
+	   private String dataDeModificacao;
 	   public String getNome() {
 	             return nome;
 	   }
@@ -21,10 +21,12 @@ public class Arquivo implements Serializable {
 	   public void setConteudo(String conteudo) {
 	             this.conteudo = conteudo;
 	   }
-	   public long getTamanhoKB() {
-	             return tamanhoKB;
-	   }
-	   public void setTamanhoKB(long tamanhoKB) {
-	             this.tamanhoKB = tamanhoKB;
-	   }
+	public String getDataDeModificacao() {
+		return dataDeModificacao;
+	}
+	public void setDataDeModificacao(String dataDeModificacao) {
+		this.dataDeModificacao = dataDeModificacao;
+	}
+	   
+	   
 }

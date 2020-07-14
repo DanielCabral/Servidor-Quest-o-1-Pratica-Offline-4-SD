@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.rmi.RemoteException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,7 +35,7 @@ public class Servidor implements InterfaceDoServidor, Serializable{
 	public Arquivo enviarArquivo(String nome) throws IOException {
 		String caminho = listaDeArquivos.get(nome);
 		String dataDeModificacao = pegarDataDeModificacao(caminho);
-		System.out.println(dataDeModificacao);
+		System.out.println("Data de modificacao: "+dataDeModificacao);
 		Arquivo arquivo = new Arquivo();
 		arquivo.setConteudo(controller.Arquivo.lerArquivo(caminho));
 		arquivo.setNome(nome);
@@ -42,18 +44,22 @@ public class Servidor implements InterfaceDoServidor, Serializable{
 		return arquivo;
 	}
 	
+	public void receberArquivo(Arquivo arquivo) throws RemoteException, ParseException{
+		System.out.println("Gravar Arquivo");
+		System.out.println(arquivo.getNome());
+		System.out.println(listaDeArquivos.get(arquivo.getNome()));
+		controller.Arquivo.gravarArquivoTexto(listaDeArquivos.get(arquivo.getNome()), arquivo.getConteudo());
+	}
+	
 	public void adicionarArquivo(String nome, String caminho) throws RemoteException{
 		listaDeArquivos.put(nome, caminho);
 	}
 	
 	public String pegarDataDeModificacao(String caminho) throws IOException {
 		File file = new File(caminho);
+		SimpleDateFormat formatter=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss"); 
 		
-		 Path path = Paths.get(caminho);
-		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
-
-		return ""+attr.lastModifiedTime();
-
+		return (""+formatter.format(file.lastModified()));
 	}
 	
 }

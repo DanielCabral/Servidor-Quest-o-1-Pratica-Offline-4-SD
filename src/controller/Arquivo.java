@@ -35,7 +35,7 @@ public static String lerArquivo(String caminho) {
 public static void gravarArquivo(String caminho,String jsArray) {
 	FileOutputStream arquivoEscrever;
 	try {
-		arquivoEscrever = new FileOutputStream(caminho);
+		arquivoEscrever = new FileOutputStream(caminho, false);
 		PrintWriter pr = new PrintWriter(arquivoEscrever);
 		pr.print(jsArray);
 		System.out.println("Arquivo criado");
